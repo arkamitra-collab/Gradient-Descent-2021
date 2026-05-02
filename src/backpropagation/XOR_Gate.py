@@ -1,8 +1,8 @@
 # Perform backpropagation for XOR Gate Truth Table values.
 
-# Let bias = 0.35, learning rate = 0.5, and initial weights = [0.15, 0.20, 0.25, 0.30, 0.40, 0.45]
+# Let bias (b1) = 0.35, bias (b2) = 0.40, bias (b3) = 0.60, learning rate = 0.5, and initial weights = [0.15, 0.20, 0.25, 0.30, 0.40, 0.45]
 
-# Truth Table of OR Gate:
+# Truth Table of XOR Gate:
 # Input 1 | Input 2 | Output
 # -----------------------------
 #   -1     |   -1     |  -1
