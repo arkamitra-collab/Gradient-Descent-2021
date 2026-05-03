@@ -5,9 +5,9 @@
 # Truth Table of OR Gate:
 # Input 1 | Input 2 | Output
 # -----------------------------
-#   -1     |   -1     |  -1
-#   -1     |    1     |   1
-#    1     |   -1     |   1
+#    0     |    0     |   0
+#    0     |    1     |   1
+#    1     |    0     |   1
 #    1     |    1     |   1
 
 import numpy as np
@@ -19,42 +19,49 @@ def calc_error(t, out):
     e = (1 / 2) * ((t - out) ** 2)
     return e
 
-x1 = np.array([-1, -1, 1, 1])
-x2 = np.array([-1, 1, -1, 1])
-target = np.array([-1, 1, 1, 1])
-bias = 0.35
+x1 = np.array([0, 0, 1, 1])
+x2 = np.array([0, 1, 0, 1])
+target = np.array([0, 1, 1, 1])
 learning_rate = 0.5
+b = 0.35
 w1 = 0.15
 w2 = 0.20
 
-for i in range(0, 4):
-    print(f"i={i} | x1={x1[i]} | x2={x2[i]} | target={target[i]}")
+for epoch in range(1, 30001):
+    total_error = 0
 
-    while True:
-        print(f"i={i} | w1={w1} | w2={w2}")
-
+    for i in range(4):
         # Forward Pass
-        y_in = x1[i] * w1 + x2[i] * w2 + bias
+        y_in = x1[i] * w1 + x2[i] * w2 + b
         y_out = sigmoid(y_in)
-        print(f"i={i} | y_in={y_in:.4f} | y_out={y_out:.4f}")
-
         error = calc_error(target[i], y_out)
-        print(f"i={i} | error={error:.4f}")
+        total_error += error
 
-        if error < 0.001:
-            break
+        if epoch % 1000 == 0:
+            print(f"i={i} | epoch={epoch} | total_error={total_error}")
 
         # Backward Pass
         # Find updated w1
         w1_error = (-(target[i] - y_out)) * (y_out * (1 - y_out)) * x1[i]
         w1_new = w1 - learning_rate * w1_error
-        print(f"i={i} | w1_error={w1_error:.4f} | w1_new={w1_new:.4f}")
 
         # Find updated w2
         w2_error = (-(target[i] - y_out)) * (y_out * (1 - y_out)) * x2[i]
         w2_new = w2 - learning_rate * w2_error
-        print(f"i={i} | w2_error={w2_error:.4f} | w2_new={w2_new:.4f}")
 
-        # Update w1 and w2
+        # Find updated bias (b)
+        b_error = (-(target[i] - y_out)) * (y_out * (1 - y_out))
+        b_new = b - learning_rate * b_error
+
+        # Update w1, w2 and b
         w1 = w1_new
         w2 = w2_new
+        b = b_new
+
+print(f"Final weights: w1={w1} | w2={w2} | b={b}")
+
+for i in range(4):
+    y_in = x1[i] * w1 + x2[i] * w2 + b
+    y_out = sigmoid(y_in)
+
+    print(f"Input: {x1[i]} {x2[i]} | Output: {target[i]} ({y_out})")
